@@ -1,3 +1,7 @@
+# MY ADDITIONS
+# Full Excel file (or working copy which begins with ~$)
+*FullItemList-Original.xlsx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
