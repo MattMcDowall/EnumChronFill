@@ -16,3 +16,6 @@ jobs:
         with:
           use-mypy: true
           use-black: false
+          use-flake8: false
+          use-pylint-error: false
+          use-vulture: false
