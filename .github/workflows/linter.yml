@@ -1,4 +1,4 @@
-name: 'Python Linter'
+name: 'PyAction'
 on:
   push:
     branches:
@@ -11,12 +11,8 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-     - uses: actions/checkout@v2
-     - name: Python Linter
-       uses: sunnysid3up/python-linter@master
-       with:
-         source: "."
-         mypy-options: "--ignore-missing-imports --show-error-codes"
-         pylint-options: "--rcfile=setup.cfg"
-         isort-options: "-w 100"
-         django: false
+      - uses: actions/checkout@v1
+      - uses: rahul-deepsource/pyaction@1.4.0
+        with:
+          use-mypy: true
+          use-black: false
