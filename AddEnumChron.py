@@ -2,7 +2,10 @@ import Credentials      # Get API keys, etc.
 import pandas as pd
 from pprint import pprint as pp
 
-# pp()    # So linter thinks it's being used
+pp()    # So linter thinks it's being used
+
+this line is wrong, it's just wrong.
+print(thisiswrongtoo)
 
 apikey = Credentials.apikey
 
