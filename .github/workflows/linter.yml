@@ -20,3 +20,4 @@ jobs:
          pylint-options: "--rcfile=setup.cfg"
          isort-options: "-w 100"
          django: false
+         strict: low
