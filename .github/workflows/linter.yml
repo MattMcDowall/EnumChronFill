@@ -1,10 +1,23 @@
-name: Pylint autoflake, isort, black
+name: 'Python Linter'
+on:
+  push:
+    branches:
+      - main
 
-on: [push]
+permissions:
+  contents: read
 
 jobs:
-  build:
+  linter:
     runs-on: ubuntu-latest
     steps:
-       - name: Python Linter
-         uses: jiwidi/python-lint-action@main
+     - uses: actions/checkout@v2
+     - name: Python Linter
+       uses: sunnysid3up/python-linter@master
+       with:
+         source: "."
+         mypy-options: "--ignore-missing-imports --show-error-codes"
+         pylint-options: "--rcfile=setup.cfg"
+         isort-options: "-w 100"
+         django: false
+         strict: low
