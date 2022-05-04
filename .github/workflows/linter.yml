@@ -12,5 +12,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
      - uses: jose-lpa/python-isort-check-action@master
-       with:
-         path: "."
