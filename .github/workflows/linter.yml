@@ -11,13 +11,7 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-     - uses: actions/checkout@v2
-     - name: Python Linter
-       uses: sunnysid3up/python-linter@master
-       with:
-         source: "."
-         mypy-options: "--ignore-missing-imports --show-error-codes"
-         pylint-options: "--rcfile=setup.cfg"
-         isort-options: "-w 100"
-         django: false
-         strict: low
+     uses: jose-lpa/python-isort-check-action@master
+     with:
+       path: "my_project"
+       settings-path: .isort.cfg
