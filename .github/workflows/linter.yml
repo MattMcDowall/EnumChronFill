@@ -11,7 +11,7 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-     uses: jose-lpa/python-isort-check-action@master
-     with:
-       path: "my_project"
-       settings-path: .isort.cfg
+     - uses: jose-lpa/python-isort-check-action@master
+       with:
+         path: "my_project"
+         settings-path: .isort.cfg
