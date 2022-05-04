@@ -14,4 +14,3 @@ jobs:
      - uses: jose-lpa/python-isort-check-action@master
        with:
          path: "."
-         settings-path: .isort.cfg
