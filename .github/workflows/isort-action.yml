@@ -1,4 +1,4 @@
-name: 'Python Linter'
+name: 'Sort imports'
 on:
   push:
     branches:

@@ -1,6 +1,6 @@
-import Credentials      # Get API keys, etc.
 import pandas as pd
 from pprint import pprint as pp
+import Credentials      # Get API keys, etc.
 
 pp()    # So linter thinks it's being used
 
