@@ -4,9 +4,6 @@ from pprint import pprint as pp
 
 pp()    # So linter thinks it's being used
 
-this line is wrong, it's just wrong.
-print(thisiswrongtoo)
-
 apikey = Credentials.apikey
 
 baseurl = 'https://api-na.hosted.exlibrisgroup.com'
