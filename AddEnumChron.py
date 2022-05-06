@@ -1,7 +1,6 @@
 import pandas as pd
 from pprint import pprint as pp
 import Credentials      # Get API keys, etc.
-
 pp()    # So linter thinks it's being used
 
 apikey = Credentials.apikey
@@ -18,6 +17,8 @@ df = df[['MMS ID', 'Holdings ID', 'Item ID', 'Description', 'Permanent Location'
 df.Description = df.Description.str.strip()
 # Collapse multiple spaces within the Description
 df.Description.replace(' +', ' ', regex=True, inplace=True)
+# Remove spaces from column names
+df.columns = [c.replace(' ', '') for c in df.columns]
 
 ###################################################################
 ### Split the Description out to appropriate Enum/Chron columns ###
