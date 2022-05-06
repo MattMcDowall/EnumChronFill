@@ -45,4 +45,5 @@ fillAndExtract(r'^(v)\.(\d)+$', ['EnumA', 'EnumB'])
 filled = pd.DataFrame()
 # Populate the new dataframe with any records that now have Enum/Chron info
 filled = df.dropna(subset=fields, thresh=1)
-# Purge records with any Enum/Chron info from the original dataframe
+# Purge records from the original dataframe if they are now in the new one
+df = df.loc[~df['ItemID'].isin(filled['ItemID'])]
