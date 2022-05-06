@@ -44,5 +44,5 @@ fillAndExtract(r'^(v)\.(\d)+$', ['EnumA', 'EnumB'])
 # Create a dataframe to hold JUST records that get filled
 filled = pd.DataFrame()
 # Populate the new dataframe with any records that now have Enum/Chron info
-
-# Purge records with any Enum/Chron info from the dataframe
+filled = df.dropna(subset=fields, thresh=1)
+# Purge records with any Enum/Chron info from the original dataframe
