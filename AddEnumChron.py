@@ -1,5 +1,6 @@
 import pandas as pd
 from pprint import pprint as pp
+import re
 import Credentials      # Get API keys, etc.
 pp()    # So linter thinks it's being used
 
@@ -25,6 +26,23 @@ df.columns = [c.replace(' ', '') for c in df.columns]
 ###################################################################
 print("Doing the replacements . . .")
 # Add the fields to be filled
-df[['EnumA', 'EnumB', 'ChronI', 'ChronJ']] = None
+fields = ['EnumA', 'EnumB', 'ChronI', 'ChronJ']
+df[fields] = None
+
+
+def fillAndExtract(regex, fields):
+    exp = re.compile(regex)
+    for i, f in enumerate(fields):
+        df[f] = df['Description'].str.extract(exp, expand=True)[i]
+
+
+###     Here will be a list of steps to find & extract Enum/Chron info  ###
+# Match descriptions with just volume & nothing else
+fillAndExtract(r'^(v)\.(\d)+$', ['EnumA', 'EnumB'])
+
+###     Once ALL those steps are done, pull those lines out to a new dataframe   ###
 # Create a dataframe to hold JUST records that get filled
 filled = pd.DataFrame()
+# Populate the new dataframe with any records that now have Enum/Chron info
+
+# Purge records with any Enum/Chron info from the dataframe
