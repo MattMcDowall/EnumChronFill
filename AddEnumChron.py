@@ -5,9 +5,8 @@ import Credentials      # Get API keys, etc.
 pp()    # So linter thinks it's being used
 
 apikey = Credentials.apikey
-
 baseurl = 'https://api-na.hosted.exlibrisgroup.com'
-queryUpdateItem = '/almaws/v1/bibs/{mms_id}/holdings/{holding_id}/items/{item_pid}?apikey={apikey}'
+query_update_item = '/almaws/v1/bibs/{mms_id}/holdings/{holding_id}/items/{item_pid}?apikey={apikey}'
 
 ### Get MMS/Holding/Item IDs, Descriptions, Locations from spreadsheet ###
 print("Reading Excel file . . .")
@@ -19,31 +18,31 @@ df.Description = df.Description.str.strip()
 # Collapse multiple spaces within the Description
 df.Description.replace(' +', ' ', regex=True, inplace=True)
 # Remove spaces from column names
-df.columns = [c.replace(' ', '') for c in df.columns]
+df.columns = [c.replace(' ', '_') for c in df.columns]
 
 ###################################################################
 ### Split the Description out to appropriate Enum/Chron columns ###
 ###################################################################
 print("Doing the replacements . . .")
 # Add columns for the Enum/Chron fields
-ECfields = ['EnumA', 'EnumB', 'ChronI', 'ChronJ']
-df[ECfields] = None
+EC_fields = ['Enum_A', 'Enum_B', 'Chron_I', 'Chron_J']
+df[EC_fields] = None
 
 
-def fillAndExtract(regex, theseFields):
+def fill_and_extract(regex, these_fields):
     exp = re.compile(regex)
-    for i, f in enumerate(theseFields):
+    for i, f in enumerate(these_fields):
         df[f] = df['Description'].str.extract(exp, expand=True)[i]
 
 
 ###     Here will be a list of steps to find & extract Enum/Chron info  ###
 # Match descriptions with just volume & nothing else
-fillAndExtract(r'^(v)\.(\d)+$', ['EnumA', 'EnumB'])
+fill_and_extract(r'^(v)\.(\d)+$', ['Enum_A', 'Enum_B'])
 
 ###     Once ALL those steps are done, pull those lines out to a new dataframe   ###
 # Create a dataframe to hold JUST records that get filled
 filled = pd.DataFrame()
 # Populate the new dataframe with any records that now have Enum/Chron info
-filled = df.dropna(subset=ECfields, thresh=1)
+filled = df.dropna(subset=EC_fields, thresh=1)
 # Purge records from the original dataframe if they are now in the new one
-df = df.loc[~df['ItemID'].isin(filled['ItemID'])]
+df = df.loc[~df['Item_ID'].isin(filled['Item_ID'])]
