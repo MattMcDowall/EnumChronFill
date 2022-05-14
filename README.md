@@ -3,7 +3,7 @@ This project addresses an issue in Ex Libris Alma, typically following migration
 
 The approach of this project is to read in the `Description` field from these records, use regular expressions to derive the enumeration & chronology info it contains, and then use that to populate the `Enum`/`Chron` fields via the Alma API.
 
-The info contained in these Description fields is pretty stunning in its variety. This has two results:
+The info contained in these Description fields is pretty stunning in its variety. This has three implications:
 - It would be inordinately complex to try and devise a single regex to address all possible Desc fields. So our approach will be to iterate through a number of expressions, trying to make each as versatile as we reasonably can without stumbling over false positives.
 - It will be impossible for this tool to derive enum/chron info for **every** case. Our goal here is to try and get down to edge cases. Obviously, at the point where it's more difficult to construct a proper regex than it is simply to manually fix a handful of records, we'll plan to do the latter.
 - Truthfully, you'll probably want to view this script as a starting point, which hopefully will cover a large number of your records. But if you have a bit of Python/RegEx knowledge, you should be able to tweak it to address quite a few more. My edge cases may well be your low-hanging fruit, in some instances. **I'm happy to help** try to come up with search &amp; replace criteria for your specific cases. Please feel free to contact me if you think I can be of assistance.
