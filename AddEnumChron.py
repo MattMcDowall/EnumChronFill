@@ -4,7 +4,7 @@ import re
 import Credentials      # Get API keys, etc.
 pp()    # So linter thinks it's being used
 
-apikey = Credentials.apikey
+apikey = Credentials.prod_api
 baseurl = 'https://api-na.hosted.exlibrisgroup.com'
 query_update_item = '/almaws/v1/bibs/{mms_id}/holdings/{holding_id}/items/{item_pid}?apikey={apikey}'
 
