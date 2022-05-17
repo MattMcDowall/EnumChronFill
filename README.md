@@ -9,7 +9,9 @@ The info contained in these Description fields is pretty stunning in its variety
 - Truthfully, you'll probably want to view this script as a starting point, which hopefully will cover a large number of your records. But if you have a bit of Python/RegEx knowledge, you should be able to tweak it to address quite a few more. My edge cases may well be your low-hanging fruit, in some instances. **I'm happy to help** try to come up with search &amp; replace criteria for your specific cases. Please feel free to contact me if you think I can be of assistance.
 
 ## **Let me say up front . . .**
-. . . that I'm relatively new and largely self-taught when it comes to both Git and Python. So I probably do things in not-the-most-efficient ways pretty regularly. If you have any advice for better methods to accomplish anything here, by all means please let me know.
+. . . that I'm relatively new and largely self-taught when it comes to both Git and Python[^1]. So I probably do things in not-the-most-efficient ways pretty regularly. If you have any advice for better methods to accomplish anything here, by all means please let me know.
+
+[^1]: *Though I do want to give a shout-out to Chris Diaz's [Library Juice Academy class on Git/Github](https://libraryjuiceacademy.com/shop/course/268-git-and-github-for-libraries/). I learned a ton, and this tool is my final project for it.*
 
 ## **Requirements**
 In an effort to simplify things and avoid a lot of unnecessary API calls, this script reads its record info from a CSV file in this same directory.
