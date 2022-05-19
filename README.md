@@ -1,4 +1,4 @@
-# EnumChronFix
+# EnumChronFill
 This project addresses an issue in Ex Libris Alma, typically following migration (or, I suppose, following a period of poor cataloging). It's typical for a large number of serial/continuous items to have `Descriptions` that indicate enumeration &amp; chronology info, but have empty `Enum` &amp; `Chron` fields. These items appear to display correctly in Primo, but lose the functionality that derives from proper Enum &amp; Chron information&mdash;namely, the ability to sort by volume, by year, etc.
 
 The approach of this project is to read in the `Description` field from these records, use regular expressions to derive the enumeration & chronology info it contains, and then use that to populate the `Enum`/`Chron` fields via the Alma API.
