@@ -6,7 +6,7 @@ The approach of this project is to read in the `Description` field from these re
 The info contained in these Description fields is pretty stunning in its variety. This has three implications:
 - It would be inordinately complex to try and devise a single regex to address all possible Desc fields. So our approach will be to iterate through a number of expressions, trying to make each as versatile as we reasonably can without stumbling over false positives.
 - It will be impossible for this tool to derive enum/chron info for **every** case. Our goal here is to try and get down to edge cases. Obviously, at the point where it's more difficult to construct a proper regex than it is simply to manually fix a handful of records, we'll plan to do the latter.
-- Truthfully, you'll probably want to view this script as a starting point, which hopefully will cover a large number of your records. But if you have a bit of Python/RegEx knowledge, you should be able to tweak it to address quite a few more. My edge cases may well be your low-hanging fruit, in some instances. **I'm happy to help** try to come up with search &amp; replace criteria for your specific cases. Please feel free to contact me if you think I can be of assistance.
+- Truthfully, you'll probably want to view this script as a starting point, which hopefully will cover a large number of your records. But if you have a bit of Python/RegEx knowledge, you should be able to tweak it to address quite a few more. My edge cases may well be your low-hanging fruit, in some instances. I'm pretty good with regex, and **I'm happy to help** try to come up with search &amp; replace criteria for your specific cases. Please feel free to contact me if you think I can be of assistance.
 
 ## **Let me say up front . . .**
 . . . that I'm relatively new and largely self-taught when it comes to both Git and Python<sup>†</sup>. So I probably do things in not-the-most-efficient ways pretty regularly. If you have any advice for better methods to accomplish anything here, by all means please let me know.
@@ -16,7 +16,7 @@ The info contained in these Description fields is pretty stunning in its variety
 ## **Requirements**
 In an effort to simplify things and avoid a lot of unnecessary API calls, this script reads its record info from a CSV file in this same directory.
 
-**Please note:** I have created a public Alma Analytics report to extract the proper fields, and to filter for records which have Desc but not Enum or Chron info. This report is in the Community>Reports folder of the Analytics shared catalog, so you should be able to use it to create a spreadsheet precisely for this tool.
+> **Please note:** I have created a public Alma Analytics report to extract the proper fields, and to filter for records which have Desc but not Enum or Chron info. From the Alma Analytics catalog, navigate to `Shared Folders > Community > Reports` and you'll find the `EnumChronFix` report. From that report, you can easily export a spreadsheet custom-made for use with this tool.
 
 If you wish to export your own CSV file from Alma, the file should be named FullItemList.csv, and it must have at least the following columns:
 - MMS_ID
