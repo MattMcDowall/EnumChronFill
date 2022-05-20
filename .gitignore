@@ -1,6 +1,7 @@
 # MY ADDITIONS
 # Full Excel file (or working copy which begins with ~$)
-*FullItemList-Original.xlsx
+*.xlsx
+*.csv
 # API Credentials — added wildcard because it's on a cloud drive; sometimes Google adds '(1)' or something
 Credentials*.py
 
