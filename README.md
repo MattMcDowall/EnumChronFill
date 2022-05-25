@@ -2,9 +2,9 @@
 > 
 > ### 🛑 **Please note**
 > 
-> I have made a significant change to the repository, removing a large CSV file that I had initially included. This is purely to save space; everyone really doesn't need to download that massive file (and any changes to it) as part of this repo.
+> *I have made a significant change to the repository, removing a large CSV file that I had initially included. This is purely to save space; everyone really doesn't need to download that massive file (and any changes to it) as part of this repo.*
 > 
-> But since I have fully removed the file even from the repo history, this means that if you cloned/downloaded the repo **before May 25, 2022,** you should really re-clone it now.
+> *But since I have fully removed the file even from the repo history, this means that if you cloned/downloaded the repo **before May 25, 2022,** you should really re-clone it now.*
 > 
 > &nbsp;
 
