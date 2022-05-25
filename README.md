@@ -1,3 +1,13 @@
+> &nbsp;
+> 
+> ### 🛑 **Please note**
+> 
+> I have made a significant change to the repository, removing a large CSV file that I had initially included. This is purely to save space; everyone really doesn't need to download that massive file (and any changes to it) as part of this repo.
+> 
+> But since I have fully removed the file even from the repo history, this means that if you cloned/downloaded the repo **before May 25, 2022,** you should really re-clone it now.
+> 
+> &nbsp;
+
 # EnumChronFill
 This project addresses an issue in Ex Libris Alma, typically following migration (or, I suppose, following a period of poor cataloging). It's typical for a large number of serial/continuous items to have `Descriptions` that indicate enumeration &amp; chronology info, but have empty `Enum` &amp; `Chron` fields. These items appear to display correctly in Primo, but lose the functionality that derives from proper Enum &amp; Chron information&mdash;namely, the ability to sort by volume, by year, etc.
 
