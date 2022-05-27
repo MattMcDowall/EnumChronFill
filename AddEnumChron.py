@@ -1,14 +1,15 @@
 from datetime import datetime
 from os.path import exists as file_exists
 import pandas as pd
-from pprint import pprint as pp
 import re
+import requests
+from time import sleep
+import xmltodict
 import Credentials      # Get API keys, etc.
-pp()    # So linter thinks it's being used
 
 apikey = Credentials.prod_api
 baseurl = 'https://api-na.hosted.exlibrisgroup.com'
-query_update_item = '/almaws/v1/bibs/{mms_id}/holdings/{holding_id}/items/{item_pid}?apikey={apikey}'
+item_query = '/almaws/v1/bibs/{mms_id}/holdings/{holding_id}/items/{item_pid}?apikey={apikey}'
 
 exported_csv = "FullItemList.csv"
 filled_csv = "FilledEnumChron.csv"
@@ -64,3 +65,34 @@ needs_header = not file_exists(filled_csv)    # Creating the file, so.
 filled.to_csv(filled_csv, mode='a', index=False, header=needs_header)
 # Replace Full CSV with what remains
 df.to_csv(exported_csv, mode='w', index=False)
+
+# Make the updates via API
+print("Applying the changes . . .")
+records = len(filled)
+c = 0
+for index, row in filled.fillna('').iterrows():
+    c += 1
+    if (c % (records / 100) < 1):     # Give the API a break, and show progress
+        print('  ', int(100 * c / records), '% complete', sep='', end='\r')
+        sleep(5)
+    # Get the current info for this item
+    r = requests.get(''.join([baseurl, item_query.format(mms_id=str(row['MMS_ID']), holding_id=str(row['Holdings_ID']), item_pid=str(row['Item_ID']), apikey=apikey)]))
+    rdict = xmltodict.parse(r.text)
+    # Push derived values into place
+    rdict['item']['item_data']['enumeration_a'] = str(row['Enum_A'])
+    rdict['item']['item_data']['enumeration_b'] = str(row['Enum_B'])
+    rdict['item']['item_data']['chronology_i'] = str(row['Chron_I'])
+    rdict['item']['item_data']['chronology_j'] = str(row['Chron_J'])
+    # Set an internal note, if there's one available
+    if (rdict['item']['item_data']['internal_note_1'] is None):
+        rdict['item']['item_data']['internal_note_1'] = 'Enum/Chron derived from Description'
+    elif (rdict['item']['item_data']['internal_note_2'] is None):
+        rdict['item']['item_data']['internal_note_2'] = 'Enum/Chron derived from Description'
+    elif (rdict['item']['item_data']['internal_note_3'] is None):
+        rdict['item']['item_data']['internal_note_3'] = 'Enum/Chron derived from Description'
+    else:
+        print()
+        print("No internal note available for item MMS ID", str(row['MMS_ID']))
+    # Push the altered record back into Alma
+    rxml = xmltodict.unparse(rdict)
+    r = requests.put(''.join([baseurl, item_query.format(mms_id=row['MMS_ID'], holding_id=row['Holdings_ID'], item_pid=row['Item_ID'], apikey=apikey)]), data=rxml.encode('utf-8'), headers={'Content-Type': 'application/xml'})
