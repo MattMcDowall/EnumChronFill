@@ -13,6 +13,7 @@ item_query = '/almaws/v1/bibs/{mms_id}/holdings/{holding_id}/items/{item_pid}?ap
 
 exported_csv = "FullItemList.csv"
 filled_csv = "FilledEnumChron.csv"
+err_log_txt = "log.txt"
 
 ### Get MMS/Holding/Item IDs, Descriptions, Locations from spreadsheet ###
 print("Reading Excel file . . .")
