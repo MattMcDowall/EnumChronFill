@@ -45,8 +45,11 @@ def fill_and_extract(regex, these_fields):
 
 ###     Here will be a list of steps to find & extract Enum/Chron info  ###
 # Example:    fill_and_extract(r'^v\.(\d)+ no.(\d)$', ['Enum_A','Enum_B'])
-# Match descriptions with just volume & nothing else
+
+# Just volume
 fill_and_extract(r'^v\.(\d)+$', ['Enum_A'])
+# Just year (post-18th-century)
+fill_and_extract(r'^((?:18|19|20)\d{2})', ['Chron_I'])
 
 ###
 
