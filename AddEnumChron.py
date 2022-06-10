@@ -53,50 +53,84 @@ fill_and_extract(r'^((?:18|19|20)\d{2})', ['Chron_I'])
 
 ###
 
+
 ###     Once ALL those steps are done, pull those lines out to a new dataframe   ###
 # Create a dataframe to hold JUST records that get filled
 filled = pd.DataFrame()
 # Populate the new dataframe with any records that now have Enum/Chron info
 filled = df.dropna(subset=EC_fields, thresh=1)
-# Purge records from the original dataframe if they are now in the new one
-df = df.loc[~df['Item_ID'].isin(filled['Item_ID'])]
-
-# Add a timestamp column to the `filled` dataframe
-filled.insert(0, "Timestamp", datetime.now())
-
-# Export the 'filled' dataframe to a CSV
-needs_header = not file_exists(filled_csv)    # Creating the file, so.
-filled.to_csv(filled_csv, mode='a', index=False, header=needs_header)
-# Replace Full CSV with what remains
-df.to_csv(exported_csv, mode='w', index=False)
 
 # Make the updates via API
 print("Applying the changes . . .")
+
 records = len(filled)
 c = 0
-for index, row in filled.fillna('').iterrows():
-    c += 1
-    if (c % (records / 100) < 1):     # Give the API a break, and show progress
-        print('  ', int(100 * c / records), '% complete', sep='', end='\r')
-        sleep(5)
-    # Get the current info for this item
-    r = requests.get(''.join([baseurl, item_query.format(mms_id=str(row['MMS_ID']), holding_id=str(row['Holdings_ID']), item_pid=str(row['Item_ID']), apikey=apikey)]))
-    rdict = xmltodict.parse(r.text)
-    # Push derived values into place
-    rdict['item']['item_data']['enumeration_a'] = str(row['Enum_A'])
-    rdict['item']['item_data']['enumeration_b'] = str(row['Enum_B'])
-    rdict['item']['item_data']['chronology_i'] = str(row['Chron_I'])
-    rdict['item']['item_data']['chronology_j'] = str(row['Chron_J'])
-    # Set an internal note, if there's one available
-    if (rdict['item']['item_data']['internal_note_1'] is None):
-        rdict['item']['item_data']['internal_note_1'] = 'Enum/Chron derived from Description'
-    elif (rdict['item']['item_data']['internal_note_2'] is None):
-        rdict['item']['item_data']['internal_note_2'] = 'Enum/Chron derived from Description'
-    elif (rdict['item']['item_data']['internal_note_3'] is None):
-        rdict['item']['item_data']['internal_note_3'] = 'Enum/Chron derived from Description'
-    else:
-        print()
-        print("No internal note available for item MMS ID", str(row['MMS_ID']))
-    # Push the altered record back into Alma
-    rxml = xmltodict.unparse(rdict)
-    r = requests.put(''.join([baseurl, item_query.format(mms_id=row['MMS_ID'], holding_id=row['Holdings_ID'], item_pid=row['Item_ID'], apikey=apikey)]), data=rxml.encode('utf-8'), headers={'Content-Type': 'application/xml'})
+needs_header = not file_exists(filled_csv)    # Apparently we're creating the file, so it needs a header
+
+with open(err_log_txt, 'a') as err_log:
+    for index, row in filled.fillna('').iterrows():
+        c += 1
+        print(c, str(row['MMS_ID']), str(row['Holdings_ID']), str(row['Item_ID']), sep="\t")
+        r = requests.get(''.join([baseurl,
+                                  item_query.format(mms_id=str(row['MMS_ID']),
+                                                    holding_id=str(row['Holdings_ID']),
+                                                    item_pid=str(row['Item_ID']),
+                                                    apikey=apikey)]))
+        rdict = xmltodict.parse(r.text)
+        if r.status_code != 200:
+            e = xmltodict.parse(r._content)
+            # Log the error
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' Error FETCHING item ', row['Item_ID'], ': (', r.status_code, ') ',
+                e['web_service_result']['errorList']['error']['errorMessage'],
+                sep='', file=err_log)
+            # Remove this item from the "filled" df
+            filled = filled.drop([index])
+            continue
+        if (c % (records/100) < 1):
+            print(int(100*c/records), '% complete', sep='')#, end='\r')
+            sleep(5)
+
+        # Merge derived values into the retrieved data (rdict)
+        rdict['item']['item_data']['enumeration_a'] = str(row['Enum_A'])
+        rdict['item']['item_data']['enumeration_b'] = str(row['Enum_B'])
+        rdict['item']['item_data']['chronology_i'] = str(row['Chron_I'])
+        rdict['item']['item_data']['chronology_j'] = str(row['Chron_J'])
+        # Set an internal note, if there's an empty one available
+        if (rdict['item']['item_data']['internal_note_1'] is None):
+            rdict['item']['item_data']['internal_note_1'] = 'Enum/Chron derived from Description'
+        elif (rdict['item']['item_data']['internal_note_2'] is None):
+            rdict['item']['item_data']['internal_note_2'] = 'Enum/Chron derived from Description'
+        elif (rdict['item']['item_data']['internal_note_3'] is None):
+            rdict['item']['item_data']['internal_note_3'] = 'Enum/Chron derived from Description'
+        else: # Nbd, just log it
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' No internal note available for item MMS ID ',
+                str(row['MMS_ID']), sep="", file=err_log)
+
+        # Push the altered record back into Alma
+        pxml = xmltodict.unparse(rdict)
+        p = requests.put(''.join([baseurl,
+                                  item_query.format(mms_id=row['MMS_ID'],
+                                                    holding_id=row['Holdings_ID'],
+                                                    item_pid=row['Item_ID'],
+                                                    apikey=apikey)]),
+                         data=pxml.encode('utf-8'), headers={'Content-Type': 'application/xml'})
+        if p.status_code != 200:
+            e = xmltodict.parse(p._content)
+            # Log the error
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' Error UPDATING item ', row['Item_ID'], ': (', p.status_code, ') ',
+                e['web_service_result']['errorList']['error']['errorMessage'],
+                sep='', file=err_log)
+            # Remove this item from the "filled" df
+            filled = filled.drop([index])
+            continue
+
+        # Log it to the CSV
+        #    Btw, the 'to_frame().T' transposes it, so it all goes in as a single comma-separated row
+        row.to_frame().T.to_csv(filled_csv, mode='a', index=False, header=needs_header)
+        needs_header=False # Henceforth
+
+
+# Purge filled records from the original df
+df = df.loc[~df['Item_ID'].isin(filled['Item_ID'])]
+# Re-create the original CSV from that df
+df.to_csv(exported_csv, index=False) # By default, will overwrite
