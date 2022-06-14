@@ -70,7 +70,12 @@ needs_header = not file_exists(filled_csv)    # Apparently we're creating the fi
 with open(err_log_txt, 'a') as err_log:
     for index, row in filled.fillna('').iterrows():
         c += 1
-        print(c, str(row['MMS_ID']), str(row['Holdings_ID']), str(row['Item_ID']), sep="\t")
+        print(c,
+            '/'.join((row['MMS_ID'],
+                row['Holdings_ID'],
+                row['Item_ID'])),
+            str(row['Description']),
+            sep="\t")
         r = requests.get(''.join([baseurl,
                                   item_query.format(mms_id=str(row['MMS_ID']),
                                                     holding_id=str(row['Holdings_ID']),
@@ -86,8 +91,8 @@ with open(err_log_txt, 'a') as err_log:
             # Remove this item from the "filled" df
             filled = filled.drop([index])
             continue
-        if (c % (records/100) < 1):
-            print(int(100*c/records), '% complete', sep='')#, end='\r')
+        if (c % (records / 100) < 1):
+            print(int(100 * c / records), '% complete', sep='')  # , end='\r')
             sleep(5)
 
         # Merge derived values into the retrieved data (rdict)
@@ -102,7 +107,7 @@ with open(err_log_txt, 'a') as err_log:
             rdict['item']['item_data']['internal_note_2'] = 'Enum/Chron derived from Description'
         elif (rdict['item']['item_data']['internal_note_3'] is None):
             rdict['item']['item_data']['internal_note_3'] = 'Enum/Chron derived from Description'
-        else: # Nbd, just log it
+        else:  # Nbd, just log it
             print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' No internal note available for item MMS ID ',
                 str(row['MMS_ID']), sep="", file=err_log)
 
@@ -127,10 +132,10 @@ with open(err_log_txt, 'a') as err_log:
         # Log it to the CSV
         #    Btw, the 'to_frame().T' transposes it, so it all goes in as a single comma-separated row
         row.to_frame().T.to_csv(filled_csv, mode='a', index=False, header=needs_header)
-        needs_header=False # Henceforth
+        needs_header = False  # Henceforth
 
 
 # Purge filled records from the original df
 df = df.loc[~df['Item_ID'].isin(filled['Item_ID'])]
 # Re-create the original CSV from that df
-df.to_csv(exported_csv, index=False) # By default, will overwrite
+df.to_csv(exported_csv, index=False)  # By default, will overwrite
