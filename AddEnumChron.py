@@ -100,16 +100,17 @@ with open(err_log_txt, 'a') as err_log:
         rdict['item']['item_data']['enumeration_b'] = str(row['Enum_B'])
         rdict['item']['item_data']['chronology_i'] = str(row['Chron_I'])
         rdict['item']['item_data']['chronology_j'] = str(row['Chron_J'])
-        # Set an internal note, if there's an empty one available
-        if (rdict['item']['item_data']['internal_note_1'] is None):
-            rdict['item']['item_data']['internal_note_1'] = 'Enum/Chron derived from Description'
-        elif (rdict['item']['item_data']['internal_note_2'] is None):
-            rdict['item']['item_data']['internal_note_2'] = 'Enum/Chron derived from Description'
-        elif (rdict['item']['item_data']['internal_note_3'] is None):
-            rdict['item']['item_data']['internal_note_3'] = 'Enum/Chron derived from Description'
-        else:  # Nbd, just log it
-            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' No internal note available for item MMS ID ',
-                str(row['MMS_ID']), sep="", file=err_log)
+        # Set an internal note, if it's not already set and there's an empty note available
+        if ('Enum/Chron derived from Description' not in rdict['item']['item_data'].values()):
+            if (not rdict['item']['item_data']['internal_note_1']):
+                rdict['item']['item_data']['internal_note_1'] = 'Enum/Chron derived from Description'
+            elif (not rdict['item']['item_data']['internal_note_2']):
+                rdict['item']['item_data']['internal_note_2'] = 'Enum/Chron derived from Description'
+            elif (not rdict['item']['item_data']['internal_note_3']):
+                rdict['item']['item_data']['internal_note_3'] = 'Enum/Chron derived from Description'
+            else:  # Nbd, just log it
+                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' No internal note available for item MMS ID ',
+                    str(row['MMS_ID']), sep="", file=err_log)
 
         # Push the altered record back into Alma
         pxml = xmltodict.unparse(rdict)
