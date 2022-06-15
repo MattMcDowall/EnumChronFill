@@ -48,6 +48,8 @@ def fill_and_extract(regex, these_fields):
 
 # Just volume
 fill_and_extract(r'^v\. ?(\d)+$', ['Enum_A'])
+# Just issue
+fill_and_extract(r'^no\. ?(\d)+$', ['Enum_B'])
 # Just year/range of years (post-18th-century)
 fill_and_extract(r'^((?:1[89]|20)\d{2}(?:-(?:1[89]|20)?\d{2})?)$', ['Chron_I'])
 # Volume + year (or range of years)
