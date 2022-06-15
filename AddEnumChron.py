@@ -72,24 +72,27 @@ needs_header = not file_exists(filled_csv)    # Apparently we're creating the fi
 with open(err_log_txt, 'a') as err_log:
     for index, row in filled.fillna('').iterrows():
         c += 1
-        print(c,
-            ' / '.join((row['MMS_ID'],
-                row['Holdings_ID'],
-                row['Item_ID'])),
-            str(row['Description']),
-            sep="\t")
         r = requests.get(''.join([baseurl,
                                   item_query.format(mms_id=str(row['MMS_ID']),
                                                     holding_id=str(row['Holdings_ID']),
                                                     item_pid=str(row['Item_ID']),
                                                     apikey=apikey)]))
         rdict = xmltodict.parse(r.text)
+        if r.status_code == 429:  # Too many requests--daily limit
+            print()
+            print('Reached API request limit for today. Stopping execution.')
+            print()
+            # Drop this record & everything after from "filled"
+            filled = filled.iloc[:c - 1]
+            break
         if r.status_code != 200:
             e = xmltodict.parse(r._content)
             # Log the error
-            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' Error FETCHING item ', row['Item_ID'], ': (', r.status_code, ') ',
-                e['web_service_result']['errorList']['error']['errorMessage'],
-                sep='', file=err_log)
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                  ' Error FETCHING item ', row['Item_ID'], ': (', r.status_code, ') ',
+                  e['web_service_result']['errorList']['error']['errorMessage'],
+                  sep='',
+                  file=err_log)
             # Remove this item from the "filled" df
             filled = filled.drop([index])
             continue
@@ -102,7 +105,7 @@ with open(err_log_txt, 'a') as err_log:
         rdict['item']['item_data']['enumeration_b'] = str(row['Enum_B'])
         rdict['item']['item_data']['chronology_i'] = str(row['Chron_I'])
         rdict['item']['item_data']['chronology_j'] = str(row['Chron_J'])
-        # Set an internal note, if it's not already set and there's an empty note available
+        # Set an internal note, if there's an empty one available
         if ('Enum/Chron derived from Description' not in rdict['item']['item_data'].values()):
             if (not rdict['item']['item_data']['internal_note_1']):
                 rdict['item']['item_data']['internal_note_1'] = 'Enum/Chron derived from Description'
@@ -122,6 +125,13 @@ with open(err_log_txt, 'a') as err_log:
                                                     item_pid=row['Item_ID'],
                                                     apikey=apikey)]),
                          data=pxml.encode('utf-8'), headers={'Content-Type': 'application/xml'})
+        if r.status_code == 429:  # Too many requests--daily limit
+            print()
+            print('Reached API request limit for today. Stopping execution.')
+            print()
+            # Drop this record & everything after from "filled"
+            filled = filled.iloc[:c - 1]
+            break
         if p.status_code != 200:
             e = xmltodict.parse(p._content)
             # Log the error
@@ -131,12 +141,12 @@ with open(err_log_txt, 'a') as err_log:
             # Remove this item from the "filled" df
             filled = filled.drop([index])
             continue
+        print(c, ' / '.join((row['MMS_ID'], row['Holdings_ID'], row['Item_ID'])), str(row['Description']), sep="\t")
 
         # Log it to the CSV
         #    Btw, the 'to_frame().T' transposes it, so it all goes in as a single comma-separated row
         row.to_frame().T.to_csv(filled_csv, mode='a', index=False, header=needs_header)
         needs_header = False  # Henceforth
-
 
 # Purge filled records from the original df
 df = df.loc[~df['Item_ID'].isin(filled['Item_ID'])]
