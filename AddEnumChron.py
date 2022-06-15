@@ -48,8 +48,8 @@ def fill_and_extract(regex, these_fields):
 
 # Just volume
 fill_and_extract(r'^v\. ?(\d)+$', ['Enum_A'])
-# Just year (post-18th-century)
-fill_and_extract(r'^((?:1[89]|20)\d{2})(?:[\-\/](?:1[89]|20)\d{2})?$', ['Chron_I'])
+# Just year/range of years (post-18th-century)
+fill_and_extract(r'^((?:1[89]|20)\d{2}(?:-(?:1[89]|20)?\d{2})?)$', ['Chron_I'])
 # Volume + year (or range of years)
 fill_and_extract(r'^v\. ?(\d)+ ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_A', 'Chron_I'])
 
@@ -73,7 +73,7 @@ with open(err_log_txt, 'a') as err_log:
     for index, row in filled.fillna('').iterrows():
         c += 1
         print(c,
-            '/'.join((row['MMS_ID'],
+            ' / '.join((row['MMS_ID'],
                 row['Holdings_ID'],
                 row['Item_ID'])),
             str(row['Description']),
