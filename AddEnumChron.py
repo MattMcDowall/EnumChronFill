@@ -44,18 +44,18 @@ def fill_and_extract(regex, these_fields):
 
 
 ###     Here will be a list of steps to find & extract Enum/Chron info  ###
-# Example:    fill_and_extract(r'^v\.(\d)+ no.(\d)$', ['Enum_A','Enum_B'])
+# Example:    fill_and_extract(r'^v\.(\d+) no.(\d)$', ['Enum_A','Enum_B'])
 
 # Just volume
-fill_and_extract(r'^v\. ?(\d)+$', ['Enum_A'])
+fill_and_extract(r'^v\. ?(\d+)$', ['Enum_A'])
 # Just issue
-fill_and_extract(r'^no\. ?(\d)+$', ['Enum_B'])
+fill_and_extract(r'^no\. ?(\d+)$', ['Enum_B'])
 # Just year/range of years (post-18th-century)
 fill_and_extract(r'^((?:1[89]|20)\d{2}(?:-(?:1[89]|20)?\d{2})?)$', ['Chron_I'])
 # Volume + year (or range of years)
-fill_and_extract(r'^v\. ?(\d)+ ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_A', 'Chron_I'])
+fill_and_extract(r'^v\. ?(\d+) ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_A', 'Chron_I'])
 # Issue + year (or range of years)
-fill_and_extract(r'^no\. ?(\d)+ ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_B', 'Chron_I'])
+fill_and_extract(r'^no\. ?(\d+) ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_B', 'Chron_I'])
 
 ###
 
