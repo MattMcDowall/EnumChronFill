@@ -118,7 +118,8 @@ with open(err_log_txt, 'a') as err_log:
             elif (not rdict['item']['item_data']['internal_note_3']):
                 rdict['item']['item_data']['internal_note_3'] = 'Enum/Chron derived from Description'
             else:  # Nbd, just log it
-                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ' No internal note available for item MMS ID ',
+                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    ' No internal note available for item MMS ID ',
                     str(row['MMS_ID']), sep="", file=err_log)
 
         # Push the altered record back into Alma
@@ -145,7 +146,10 @@ with open(err_log_txt, 'a') as err_log:
             # Remove this item from the "filled" df
             filled = filled.drop([index])
             continue
-        print(c, ' / '.join((row['MMS_ID'], row['Holdings_ID'], row['Item_ID'])), str(row['Description']), sep="\t")
+        print(c, ' / '.join([row['MMS_ID'], row['Holdings_ID'], row['Item_ID']]),
+              row['Description'],
+              ' | '.join(x or '' for x in [row['Enum_A'], row['Enum_B'], row['Chron_I'], row['Chron_J']]),
+              sep="\t")
 
         # Log it to the CSV
         #    Btw, the 'to_frame().T' transposes it, so it all goes in as a single comma-separated row
