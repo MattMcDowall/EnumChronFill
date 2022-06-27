@@ -52,6 +52,8 @@ fill_and_extract(r'^v\. ?(\d+)$', ['Enum_A'])
 fill_and_extract(r'^no\. ?(\d+)$', ['Enum_B'])
 # Just year/range of years (post-18th-century)
 fill_and_extract(r'^((?:1[89]|20)\d{2}(?:-(?:1[89]|20)?\d{2})?)$', ['Chron_I'])
+# Volume + issue
+fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$', ['Enum_A', 'Enum_B'])
 # Volume + year (or range of years)
 fill_and_extract(r'^v\. ?(\d+) ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_A', 'Chron_I'])
 # Issue + year (or range of years)
