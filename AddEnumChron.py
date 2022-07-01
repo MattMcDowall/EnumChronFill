@@ -46,18 +46,24 @@ def fill_and_extract(regex, these_fields):
 ###     Here will be a list of steps to find & extract Enum/Chron info  ###
 # Example:    fill_and_extract(r'^v\.(\d+) no.(\d)$', ['Enum_A','Enum_B'])
 
+# Set some common expressions that can be used in a modular way
+# 3-digit month/season
+mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sept?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Spr(?:ing)?|Sum(?:mer)?|Fall?|Aut(?:umn)?|Win(?:ter)?)'
+# 2- or 4-digit year/range of years
+yyyyRE = r'(?:1[89]|20)?\d{2}'
+
 # Just volume
 fill_and_extract(r'^v\. ?(\d+)$', ['Enum_A'])
 # Just issue
 fill_and_extract(r'^no\. ?(\d+)$', ['Enum_B'])
 # Just year/range of years (post-18th-century)
-fill_and_extract(r'^((?:1[89]|20)\d{2}(?:-(?:1[89]|20)?\d{2})?)$', ['Chron_I'])
+fill_and_extract(r'^(' + yyyyRE + r'(?:-' + yyyyRE + r')?)$', ['Chron_I'])
 # Volume + issue
 fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$', ['Enum_A', 'Enum_B'])
 # Volume + year (or range of years)
-fill_and_extract(r'^v\. ?(\d+) ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_A', 'Chron_I'])
+fill_and_extract(r'^v\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$', ['Enum_A', 'Chron_I'])
 # Issue + year (or range of years)
-fill_and_extract(r'^no\. ?(\d+) ((?:1[89]|20)\d{2}(?:[\-\/](?:1[89]|20)?\d{2})?)$', ['Enum_B', 'Chron_I'])
+fill_and_extract(r'^no\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$', ['Enum_B', 'Chron_I'])
 
 ###
 
