@@ -44,7 +44,6 @@ def fill_and_extract(regex, these_fields):
 
 
 ###     Here will be a list of steps to find & extract Enum/Chron info  ###
-# Example:    fill_and_extract(r'^v\.(\d+) no.(\d)$', ['Enum_A','Enum_B'])
 
 # Set some common expressions that can be used in a modular way
 # 3-digit month/season
@@ -66,6 +65,8 @@ fill_and_extract(r'^v\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$', ['
 fill_and_extract(r'^no\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$', ['Enum_B', 'Chron_I'])
 # Vol + issue + date + year
 fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmmRE + r' \d{1,2}' + '),? (' + yyyyRE + ')$', ['Enum_A', 'Enum_B', 'Chron_J', 'Chron_I'])
+# Range of months within one calendar year
+fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$', ['Chron_J', 'Chron_I'])
 
 ###
 
