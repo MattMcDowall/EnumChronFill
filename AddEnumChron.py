@@ -51,8 +51,8 @@ mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Au
 # 4-digit year/range of years (post-18th-century)
 yyyyRE = r'(?:1[89]|20)\d{2}'
 
-# Just volume
-fill_and_extract(r'^v\. ?(\d+)$',
+# Just volume(s) & nothing else
+fill_and_extract(r'^v\. ?(\d+(?:[\&\-]\d+)?)$',
     ['Enum_A'])
 # Volume + issue
 fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$',
