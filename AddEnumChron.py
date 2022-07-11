@@ -79,7 +79,7 @@ fill_and_extract(r'^(' + mmmRE + r' \d{1,2}(?:[\-\/]\d{1,2})?),? (' + yyyyRE + '
 fill_and_extract(r'^(' + yyyyRE + r'(?:-' + yyyyRE + r')?)$',
     ['Chron_I'])
 # Year(s) + volume
-fill_and_extract(r'^(' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?) v\. ?(\d+) $',
+fill_and_extract(r'^(' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?) v\. ?(\d+)$',
     ['Chron_I', 'Enum_A'])
 
 ###
