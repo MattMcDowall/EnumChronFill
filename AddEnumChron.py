@@ -52,25 +52,35 @@ mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Au
 yyyyRE = r'(?:1[89]|20)\d{2}'
 
 # Just volume
-fill_and_extract(r'^v\. ?(\d+)$', ['Enum_A'])
+fill_and_extract(r'^v\. ?(\d+)$',
+    ['Enum_A'])
 # Volume + issue
-fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$', ['Enum_A', 'Enum_B'])
+fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$',
+    ['Enum_A', 'Enum_B'])
 # Vol + issue + date + year
-fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmmRE + r' \d{1,2}' + '),? (' + yyyyRE + ')$', ['Enum_A', 'Enum_B', 'Chron_J', 'Chron_I'])
+fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmmRE + r' \d{1,2}' + '),? (' + yyyyRE + ')$',
+    ['Enum_A', 'Enum_B', 'Chron_J', 'Chron_I'])
 # Volume + year(s)
-fill_and_extract(r'^v\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$', ['Enum_A', 'Chron_I'])
+fill_and_extract(r'^v\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$',
+    ['Enum_A', 'Chron_I'])
 # Just issue
-fill_and_extract(r'^no\. ?(\d+)$', ['Enum_B'])
+fill_and_extract(r'^no\. ?(\d+)$',
+    ['Enum_B'])
 # Issue + year(s)
-fill_and_extract(r'^no\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$', ['Enum_B', 'Chron_I'])
+fill_and_extract(r'^no\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$',
+    ['Enum_B', 'Chron_I'])
 # Range of months within one calendar year
-fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$', ['Chron_J', 'Chron_I'])
+fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$',
+    ['Chron_J', 'Chron_I'])
 # Date + year
-fill_and_extract(r'^(' + mmmRE + r' \d{1,2}(?:[\-\/]\d{1,2})?),? (' + yyyyRE + ')$', ['Chron_J', 'Chron_I'])
+fill_and_extract(r'^(' + mmmRE + r' \d{1,2}(?:[\-\/]\d{1,2})?),? (' + yyyyRE + ')$',
+    ['Chron_J', 'Chron_I'])
 # Just year(s)
-fill_and_extract(r'^(' + yyyyRE + r'(?:-' + yyyyRE + r')?)$', ['Chron_I'])
+fill_and_extract(r'^(' + yyyyRE + r'(?:-' + yyyyRE + r')?)$',
+    ['Chron_I'])
 # Year(s) + volume
-fill_and_extract(r'^(' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?) v\. ?(\d+) $', ['Chron_I', 'Enum_A'])
+fill_and_extract(r'^(' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?) v\. ?(\d+) $',
+    ['Chron_I', 'Enum_A'])
 
 ###
 
