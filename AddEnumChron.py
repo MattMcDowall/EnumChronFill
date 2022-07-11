@@ -65,6 +65,8 @@ fill_and_extract(r'^no\. ?(\d+)$', ['Enum_B'])
 fill_and_extract(r'^no\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$', ['Enum_B', 'Chron_I'])
 # Range of months within one calendar year
 fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$', ['Chron_J', 'Chron_I'])
+# Date + year
+fill_and_extract(r'^(' + mmmRE + r' \d{1,2}(?:[\-\/]\d{1,2})?),? (' + yyyyRE + ')$', ['Chron_J', 'Chron_I'])
 # Just year(s)
 fill_and_extract(r'^(' + yyyyRE + r'(?:-' + yyyyRE + r')?)$', ['Chron_I'])
 # Year(s) + volume
