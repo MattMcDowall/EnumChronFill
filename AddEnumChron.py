@@ -38,7 +38,7 @@ df[EC_fields] = None
 
 
 def fill_and_extract(regex, these_fields):
-    exp = re.compile(regex)
+    exp = re.compile(regex, re.IGNORECASE)
     for i, f in enumerate(these_fields):
         df[f] = df['Description'].str.extract(exp, expand=True)[i].fillna(df[f])
 
