@@ -52,7 +52,7 @@ mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Au
 yyyyRE = r'(?:1[89]|20)\d{2}'
 
 # Just volume(s) & nothing else
-fill_and_extract(r'^v\. ?(\d+(?:[\&\-]\d+)?)$',
+fill_and_extract(r'^v\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
     ['Enum_A'])
 # Volume + issue
 fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$',
