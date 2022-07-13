@@ -113,6 +113,9 @@ with open(err_log_txt, 'a') as err_log:
                                                     item_pid=str(row['Item_ID']),
                                                     apikey=apikey)]))
         rdict = xmltodict.parse(r.text)
+        if (c % (records / 100) < 1):
+            print(int(100 * c / records), '% complete', sep='')  # , end='\r')
+            sleep(5)
         if r.status_code == 429:  # Too many requests--daily limit
             print()
             print('Reached API request limit for today. Stopping execution.')
@@ -132,9 +135,6 @@ with open(err_log_txt, 'a') as err_log:
             filled = filled.drop([index])
             print(c, ' / '.join([row['MMS_ID'], row['Holdings_ID'], row['Item_ID']]), "Retrieval error logged", sep="\t")
             continue
-        if (c % (records / 100) < 1):
-            print(int(100 * c / records), '% complete', sep='')  # , end='\r')
-            sleep(5)
 
         # Merge derived values into the retrieved data (rdict)
         rdict['item']['item_data']['enumeration_a'] = str(row['Enum_A'])
