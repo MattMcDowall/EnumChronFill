@@ -51,7 +51,7 @@ mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Au
 # 4-digit year (post-18th-century)
 yyyyRE = r'(?:1[89]|20)\d{2}'
 # 4-digit year leading to a range
-yyyy_yyRE = r'(?:1[89]|20)\d{2}[\/\-](?:\d{2}|\d{4})'
+yyyy_yyRE = r'(?:1[89]|20)\d{2}-(?:\d{2}|\d{4})'
 
 # Just volume(s) & nothing else
 fill_and_extract(r'^v\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
