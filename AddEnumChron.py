@@ -48,8 +48,10 @@ def fill_and_extract(regex, these_fields):
 # Set some common expressions that can be used in a modular way
 # 3-digit month/season
 mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sept?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Spr(?:ing)?|Sum(?:mer)?|Fall?|Aut(?:umn)?|Win(?:ter)?)'
-# 4-digit year/range of years (post-18th-century)
+# 4-digit year (post-18th-century)
 yyyyRE = r'(?:1[89]|20)\d{2}'
+# 4-digit year leading to a range
+yyyy_yyRE = r'(?:1[89]|20)\d{2}[\/\-](?:\d{2}|\d{4})'
 
 # Just volume(s) & nothing else
 fill_and_extract(r'^v\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
@@ -61,13 +63,13 @@ fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$',
 fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmmRE + r' \d{1,2}' + '),? (' + yyyyRE + ')$',
     ['Enum_A', 'Enum_B', 'Chron_J', 'Chron_I'])
 # Volume + year(s)
-fill_and_extract(r'^v\. ?(\d+) +(\(?' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?\)?)$',
+fill_and_extract(r'^v\. ?(\d+) +(\(?' + yyyy_yyRE + r'\)?)$',
     ['Enum_A', 'Chron_I'])
 # Just issue
 fill_and_extract(r'^no\. ?(\d+)$',
     ['Enum_B'])
 # Issue + year(s)
-fill_and_extract(r'^no\. ?(\d+) (' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?)$',
+fill_and_extract(r'^no\. ?(\d+) (' + yyyy_yyRE + r')$',
     ['Enum_B', 'Chron_I'])
 # Range of months within one calendar year
 fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$',
@@ -76,10 +78,10 @@ fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$',
 fill_and_extract(r'^(' + mmmRE + r' \d{1,2}(?:[\-\/]\d{1,2})?),? (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
 # Just year(s)
-fill_and_extract(r'^(' + yyyyRE + r'(?:-' + yyyyRE + r')?)$',
+fill_and_extract(r'^(' + yyyy_yyRE + r')$',
     ['Chron_I'])
 # Year(s) + volume
-fill_and_extract(r'^(' + yyyyRE + r'(?:[\-\/]' + yyyyRE + r')?) v\. ?(\d+)$',
+fill_and_extract(r'^(' + yyyy_yyRE + r') v\. ?(\d+)$',
     ['Chron_I', 'Enum_A'])
 # Year + month/season/date
 fill_and_extract(r'^(' + yyyyRE + r') (' + mmmRE + r'(?: \d{1,2})?)$',
