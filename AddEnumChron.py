@@ -130,6 +130,7 @@ with open(err_log_txt, 'a') as err_log:
                   file=err_log)
             # Remove this item from the "filled" df
             filled = filled.drop([index])
+            print(c, ' / '.join([row['MMS_ID'], row['Holdings_ID'], row['Item_ID']]), "Retrieval error logged", sep="\t")
             continue
         if (c % (records / 100) < 1):
             print(int(100 * c / records), '% complete', sep='')  # , end='\r')
@@ -176,6 +177,7 @@ with open(err_log_txt, 'a') as err_log:
                 sep='', file=err_log)
             # Remove this item from the "filled" df
             filled = filled.drop([index])
+            print(c, ' / '.join([row['MMS_ID'], row['Holdings_ID'], row['Item_ID']]), "Record update error logged", sep="\t")
             continue
         print(c, ' / '.join([row['MMS_ID'], row['Holdings_ID'], row['Item_ID']]),
               row['Description'],
