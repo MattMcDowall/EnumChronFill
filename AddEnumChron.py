@@ -18,7 +18,7 @@ err_log_txt = "log.txt"
 ### Get MMS/Holding/Item IDs, Descriptions, Locations from spreadsheet ###
 print("Reading Excel file . . .")
 # Depending on how the file was exported, column names may or may have either spaces or underscores
-df = pd.read_csv(exported_csv, converters={'Item_ID': str, 'Holdings_ID': str, 'MMS_ID': str, 'Item ID': str, 'Holdings ID': str, 'MMS ID': str})
+df = pd.read_csv(exported_csv, dtype=str)
 # Remove spaces from column names
 df.columns = [c.replace(' ', '_') for c in df.columns]
 # Rename 'Location' column
