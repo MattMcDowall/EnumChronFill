@@ -46,8 +46,10 @@ def fill_and_extract(regex, these_fields):
 ###     Here will be a list of steps to find & extract Enum/Chron info  ###
 
 # Set some common expressions that can be used in a modular way
-# 3-digit month/season
+# Month/season
 mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sept?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Spr(?:ing)?|Sum(?:mer)?|Fall?|Aut(?:umn)?|Win(?:ter)?)'
+# Month + date(s)
+mmm_ddRE = mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?'
 # 4-digit year (post-18th-century)
 yyyyRE = r'(?:1[89]|20)\d{2}'
 # 4-digit year leading to a range
@@ -60,7 +62,7 @@ fill_and_extract(r'^v\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
 fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$',
     ['Enum_A', 'Enum_B'])
 # Vol + issue + date + year
-fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmmRE + r' \d{1,2}' + '),? (' + yyyyRE + ')$',
+fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmm_ddRE + r'),? (' + yyyyRE + ')$',
     ['Enum_A', 'Enum_B', 'Chron_J', 'Chron_I'])
 # Volume + year(s)
 fill_and_extract(r'^v\. ?(\d+) +(\(?' + yyyy_yyRE + r'\)?)$',
@@ -71,11 +73,11 @@ fill_and_extract(r'^no\. ?(\d+)$',
 # Issue + year(s)
 fill_and_extract(r'^no\. ?(\d+) (' + yyyy_yyRE + r')$',
     ['Enum_B', 'Chron_I'])
-# Range of months within one calendar year
-fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$',
+# Range of dates within one calendar year
+fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
 # Date(s) + year
-fill_and_extract(r'^(' + mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?),? (' + yyyyRE + ')$',
+fill_and_extract(r'^(' + mmm_ddRE + '),? (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
 # Just year(s)
 fill_and_extract(r'^(' + yyyy_yyRE + r')$',
@@ -84,7 +86,7 @@ fill_and_extract(r'^(' + yyyy_yyRE + r')$',
 fill_and_extract(r'^(' + yyyy_yyRE + r') v\. ?(\d+(?:[\-\/]\d+)?)$',
     ['Chron_I', 'Enum_A'])
 # Year + month/season/date
-fill_and_extract(r'^(' + yyyyRE + r') (' + mmmRE + r'(?: \d{1,2})?)$',
+fill_and_extract(r'^(' + yyyyRE + r') (' + mmm_ddRE + r')$',
     ['Chron_I', 'Chron_J'])
 ###
 
