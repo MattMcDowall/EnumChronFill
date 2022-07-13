@@ -74,8 +74,8 @@ fill_and_extract(r'^no\. ?(\d+) (' + yyyy_yyRE + r')$',
 # Range of months within one calendar year
 fill_and_extract(r'^(' + mmmRE + r'[\-\/]' + mmmRE + '),? (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
-# Date + year
-fill_and_extract(r'^(' + mmmRE + r' \d{1,2}(?:[\-\/]\d{1,2})?),? (' + yyyyRE + ')$',
+# Date(s) + year
+fill_and_extract(r'^(' + mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?),? (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
 # Just year(s)
 fill_and_extract(r'^(' + yyyy_yyRE + r')$',
