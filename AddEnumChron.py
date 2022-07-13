@@ -80,8 +80,8 @@ fill_and_extract(r'^(' + mmmRE + r' \d{1,2}(?:[\-\/]\d{1,2})?),? (' + yyyyRE + '
 # Just year(s)
 fill_and_extract(r'^(' + yyyy_yyRE + r')$',
     ['Chron_I'])
-# Year(s) + volume
-fill_and_extract(r'^(' + yyyy_yyRE + r') v\. ?(\d+)$',
+# Year(s) + volume(s)
+fill_and_extract(r'^(' + yyyy_yyRE + r') v\. ?(\d+(?:[\-\/]\d+)?)$',
     ['Chron_I', 'Enum_A'])
 # Year + month/season/date
 fill_and_extract(r'^(' + yyyyRE + r') (' + mmmRE + r'(?: \d{1,2})?)$',
