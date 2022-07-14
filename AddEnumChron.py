@@ -50,10 +50,10 @@ def fill_and_extract(regex, these_fields):
 mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sept?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Spr(?:ing)?|Sum(?:mer)?|Fall?|Aut(?:umn)?|Win(?:ter)?)'
 # Month + date(s)
 mmm_ddRE = mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?'
-# 4-digit year (post-18th-century)
+# 4-digit year
 yyyyRE = r'(?:1[89]|20)\d{2}'
-# 4-digit year leading to a range
-yyyy_yyRE = r'(?:1[89]|20)\d{2}-(?:\d{2}|\d{4})'
+# 4-digit year possibly leading to a range
+yyyy_yyRE = r'(?:1[89]|20)\d{2}(?:-\d{2}|-\d{4})'
 # Index/Supp/etc
 iiiiRE = r'(?:abstracts?|addendum|brief|Directory|exec(?:utive)? summ(?:ary)?|guide|handbook|(?:author |cum |master |subj )?Index(?:es)?|revisions?|spec(?:ial(?:edition|issue|rep|report)?)?|Suppl?\.?(?: \d+)? ?)|title sheet|updates?'
 
