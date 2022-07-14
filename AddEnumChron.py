@@ -33,7 +33,7 @@ df.Description.replace(' +', ' ', regex=True, inplace=True)
 ###################################################################
 print("Doing the replacements . . .")
 # Add columns for the Enum/Chron fields
-EC_fields = ['Enum_A', 'Enum_B', 'Chron_I', 'Chron_J']
+EC_fields = ['Enum_A', 'Enum_B', 'Enum_C', 'Chron_I', 'Chron_J']
 df[EC_fields] = None
 
 
@@ -139,6 +139,7 @@ with open(err_log_txt, 'a') as err_log:
         # Merge derived values into the retrieved data (rdict)
         rdict['item']['item_data']['enumeration_a'] = str(row['Enum_A'])
         rdict['item']['item_data']['enumeration_b'] = str(row['Enum_B'])
+        rdict['item']['item_data']['enumeration_c'] = str(row['Enum_C'])
         rdict['item']['item_data']['chronology_i'] = str(row['Chron_I'])
         rdict['item']['item_data']['chronology_j'] = str(row['Chron_J'])
         # Set an internal note, if there's an empty one available
@@ -181,7 +182,7 @@ with open(err_log_txt, 'a') as err_log:
             continue
         print(c, ' / '.join([row['MMS_ID'], row['Holdings_ID'], row['Item_ID']]),
               row['Description'],
-              ' | '.join(x or '' for x in [row['Enum_A'], row['Enum_B'], row['Chron_I'], row['Chron_J']]),
+              ' | '.join(x or '' for x in [row['Enum_A'], row['Enum_B'], row['Enum_C'], row['Chron_I'], row['Chron_J']]),
               sep="\t")
 
         # Log it to the CSV
