@@ -21,8 +21,8 @@ print("Reading Excel file . . .")
 df = pd.read_csv(exported_csv, dtype=str)
 # Remove spaces from column names
 df.columns = [c.replace(' ', '_') for c in df.columns]
-# Rename 'Location' column
-df = df.rename(columns={'Permanent_Location': 'Location'})
+# Rename certain columns
+df = df.rename(columns={'Permanent_Location': 'Location', 'Item_Policy': 'Policy', 'Material_Type': 'Material'})
 # Strip leading/trailing space from Description
 df.Description = df.Description.str.strip()
 # Collapse multiple spaces within the Description
@@ -81,12 +81,6 @@ fill_and_extract(r'^no\. ?(\d+) (' + yyyy_yyRE + r')$',
 # Just part(s) & nothing else
 fill_and_extract(r'^pt\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
     ['Enum_C'])
-# Range of dates within one calendar year
-fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + ')$',
-    ['Chron_J', 'Chron_I'])
-# Date(s) + year
-fill_and_extract(r'^(' + mmm_ddRE + '),? (' + yyyyRE + ')$',
-    ['Chron_J', 'Chron_I'])
 # Just year(s)
 fill_and_extract(r'^(' + yyyy_yyRE + r')$',
     ['Chron_I'])
@@ -102,6 +96,15 @@ fill_and_extract(r'^(' + yyyy_yyRE + r') (' + iiiiRE + r')$',
 # Year + month/season/date
 fill_and_extract(r'^(' + yyyyRE + r') (' + mmm_ddRE + r')$',
     ['Chron_I', 'Chron_J'])
+# Range of dates within one calendar year
+fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + ')$',
+    ['Chron_J', 'Chron_I'])
+# Range of dates and range of years
+fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + r'[\-\/]' + mmm_ddRE + ')$',
+    ['Chron_J', 'Chron_I'])
+# Date(s) + year
+fill_and_extract(r'^(' + mmm_ddRE + '),? (' + yyyyRE + ')$',
+    ['Chron_J', 'Chron_I'])
 ###
 
 
