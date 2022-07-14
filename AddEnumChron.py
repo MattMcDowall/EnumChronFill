@@ -73,6 +73,9 @@ fill_and_extract(r'^no\. ?(\d+)$',
 # Issue + year(s)
 fill_and_extract(r'^no\. ?(\d+) (' + yyyy_yyRE + r')$',
     ['Enum_B', 'Chron_I'])
+# Just part(s) & nothing else
+fill_and_extract(r'^pt\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
+    ['Enum_C'])
 # Range of dates within one calendar year
 fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
@@ -85,6 +88,9 @@ fill_and_extract(r'^(' + yyyy_yyRE + r')$',
 # Year(s) + volume(s)
 fill_and_extract(r'^(' + yyyy_yyRE + r') v\. ?(\d+(?:[\-\/]\d+)?)$',
     ['Chron_I', 'Enum_A'])
+# Year(s) + part(s)
+fill_and_extract(r'^(' + yyyy_yyRE + r') pt\. ?(\d+(?:[\-\/]\d+)?)$',
+    ['Chron_I', 'Enum_C'])
 # Year + month/season/date
 fill_and_extract(r'^(' + yyyyRE + r') (' + mmm_ddRE + r')$',
     ['Chron_I', 'Chron_J'])
