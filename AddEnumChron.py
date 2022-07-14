@@ -28,6 +28,10 @@ df.Description = df.Description.str.strip()
 # Collapse multiple spaces within the Description
 df.Description.replace(' +', ' ', regex=True, inplace=True)
 
+# Exclude special cases--GovDocs with weird numbering
+df = df[~((df['Material'].isin(['Issue','Microform','Other'])) & (df['Location'].isin(['gdmo','gdrf','gdrfi','govdo'])))]
+
+
 ###################################################################
 ### Split the Description out to appropriate Enum/Chron columns ###
 ###################################################################
