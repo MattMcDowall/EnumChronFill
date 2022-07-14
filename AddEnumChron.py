@@ -54,6 +54,8 @@ mmm_ddRE = mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?'
 yyyyRE = r'(?:1[89]|20)\d{2}'
 # 4-digit year leading to a range
 yyyy_yyRE = r'(?:1[89]|20)\d{2}-(?:\d{2}|\d{4})'
+# Index/Supp/etc
+iiiiRE = r'(?:abstracts?|addendum|brief|Directory|exec(?:utive)? summ(?:ary)?|guide|handbook|(?:author |cum |master |subj )?Index(?:es)?|revisions?|spec(?:ial(?:edition|issue|rep|report)?)?|Suppl?\.?(?: \d+)? ?)|title sheet|updates?'
 
 # Just volume(s) & nothing else
 fill_and_extract(r'^v\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
@@ -64,6 +66,9 @@ fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$',
 # Vol + issue + date + year
 fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmm_ddRE + r'),? (' + yyyyRE + ')$',
     ['Enum_A', 'Enum_B', 'Chron_J', 'Chron_I'])
+# Volume(s) + "Index"
+fill_and_extract(r'^v\. ?(\d+(?:[\-\/]\d+)?) (' + iiiiRE + r')$',
+    ['Enum_A', 'Enum_C'])
 # Volume + year(s)
 fill_and_extract(r'^v\. ?(\d+) +(\(?' + yyyy_yyRE + r'\)?)$',
     ['Enum_A', 'Chron_I'])
@@ -90,6 +95,9 @@ fill_and_extract(r'^(' + yyyy_yyRE + r') v\. ?(\d+(?:[\-\/]\d+)?)$',
     ['Chron_I', 'Enum_A'])
 # Year(s) + part(s)
 fill_and_extract(r'^(' + yyyy_yyRE + r') pt\. ?(\d+(?:[\-\/]\d+)?)$',
+    ['Chron_I', 'Enum_C'])
+# Year(s) + "Index"
+fill_and_extract(r'^(' + yyyy_yyRE + r') (' + iiiiRE + r')$',
     ['Chron_I', 'Enum_C'])
 # Year + month/season/date
 fill_and_extract(r'^(' + yyyyRE + r') (' + mmm_ddRE + r')$',
