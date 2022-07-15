@@ -74,7 +74,7 @@ fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmm_ddRE + r'),? (' + yyyyRE
 fill_and_extract(r'^v\. ?(\d+(?:[\-\/]\d+)?) (' + iiiiRE + r')$',
     ['Enum_A', 'Enum_C'])
 # Volume + year(s)
-fill_and_extract(r'^v\. ?(\d+) +(\(?' + yyyy_yyRE + r'\)?)$',
+fill_and_extract(r'^v\. ?(\d+(?:[\-\/]\d+)?) +(\(?' + yyyy_yyRE + r'\)?)$',
     ['Enum_A', 'Chron_I'])
 # Just issue
 fill_and_extract(r'^no\. ?(\d+)$',
