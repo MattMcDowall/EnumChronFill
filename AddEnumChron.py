@@ -50,6 +50,12 @@ def fill_and_extract(regex, these_fields):
 ###     Here will be a list of steps to find & extract Enum/Chron info  ###
 
 # Set some common expressions that can be used in a modular way
+# Single volume/book - CAPTURE
+vvvRE = r'(?:v|bk)\. ?(\d+[a-z]?)'
+# Volume(s)/book(s) - CAPTURE
+vvv_vvRE = vvvRE[:-1] + r'(?:[\&\-]\d+)?)'
+# Index/Supp/etc
+iiiiRE = r'(?:abstracts?|addendum|brief|Directory|exec(?:utive)? summ(?:ary)?|guide|handbook|(?:author |cum |master |subj )?Index(?:es)?|revisions?|spec(?:ial(?:edition|issue|rep|report)?)?|Suppl?\.?(?: \d+)? ?)|title sheet|updates?'
 # Month/season
 mmmRE = r'(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sept?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Spr(?:ing)?|Sum(?:mer)?|Fall?|Aut(?:umn)?|Win(?:ter)?)'
 # Month + date(s)
@@ -58,23 +64,22 @@ mmm_ddRE = mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?'
 yyyyRE = r'(?:1[89]|20)\d{2}'
 # 4-digit year possibly leading to a range
 yyyy_yyRE = r'(?:1[89]|20)\d{2}(?:-\d{2}|-\d{4})?'
-# Index/Supp/etc
-iiiiRE = r'(?:abstracts?|addendum|brief|Directory|exec(?:utive)? summ(?:ary)?|guide|handbook|(?:author |cum |master |subj )?Index(?:es)?|revisions?|spec(?:ial(?:edition|issue|rep|report)?)?|Suppl?\.?(?: \d+)? ?)|title sheet|updates?'
+
 
 # Just volume(s) & nothing else
-fill_and_extract(r'^v\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
+fill_and_extract(r'^' + vvv_vvRE + r'$',
     ['Enum_A'])
 # Volume + issue
-fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+)$',
+fill_and_extract(r'^' + vvvRE + r'[ \/]no\. ?(\d+)$',
     ['Enum_A', 'Enum_B'])
 # Vol + issue + date + year
-fill_and_extract(r'^v\. ?(\d+)[ \/]no\. ?(\d+) (' + mmm_ddRE + r'),? (' + yyyyRE + ')$',
+fill_and_extract(r'^' + vvvRE + r'[ \/]no\. ?(\d+) (' + mmm_ddRE + r'),? (' + yyyyRE + ')$',
     ['Enum_A', 'Enum_B', 'Chron_J', 'Chron_I'])
 # Volume(s) + "Index"
-fill_and_extract(r'^v\. ?(\d+(?:[\-\/]\d+)?) (' + iiiiRE + r')$',
+fill_and_extract(r'^' + vvv_vvRE + r' (' + iiiiRE + r')$',
     ['Enum_A', 'Enum_C'])
-# Volume + year(s)
-fill_and_extract(r'^v\. ?(\d+(?:[\-\/]\d+)?) +\(?(' + yyyy_yyRE + r')\)?$',
+# Volume(s) + year(s)
+fill_and_extract(r'^' + vvv_vvRE + r' +\(?(' + yyyy_yyRE + r')\)?$',
     ['Enum_A', 'Chron_I'])
 # Just issue
 fill_and_extract(r'^no\. ?(\d+)$',
@@ -89,7 +94,7 @@ fill_and_extract(r'^pt\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
 fill_and_extract(r'^(' + yyyy_yyRE + r')$',
     ['Chron_I'])
 # Year(s) + volume(s)
-fill_and_extract(r'^(' + yyyy_yyRE + r') v\. ?(\d+(?:[\-\/]\d+)?)$',
+fill_and_extract(r'^(' + yyyy_yyRE + r') ' + vvv_vvRE + r'$',
     ['Chron_I', 'Enum_A'])
 # Year(s) + part(s)
 fill_and_extract(r'^(' + yyyy_yyRE + r') pt\. ?(\d+(?:[\-\/]\d+)?)$',
