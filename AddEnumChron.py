@@ -57,7 +57,7 @@ mmm_ddRE = mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?'
 # 4-digit year
 yyyyRE = r'(?:1[89]|20)\d{2}'
 # 4-digit year possibly leading to a range
-yyyy_yyRE = r'(?:1[89]|20)\d{2}(?:-\d{2}|-\d{4})'
+yyyy_yyRE = r'(?:1[89]|20)\d{2}(?:-\d{2}|-\d{4})?'
 # Index/Supp/etc
 iiiiRE = r'(?:abstracts?|addendum|brief|Directory|exec(?:utive)? summ(?:ary)?|guide|handbook|(?:author |cum |master |subj )?Index(?:es)?|revisions?|spec(?:ial(?:edition|issue|rep|report)?)?|Suppl?\.?(?: \d+)? ?)|title sheet|updates?'
 
