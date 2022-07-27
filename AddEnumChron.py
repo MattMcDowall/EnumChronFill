@@ -115,13 +115,29 @@ fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + r'[
 fill_and_extract(r'^(' + mmm_ddRE + '),? (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
 
-# SPECIAL CASE: Range of dates spanning across years
-#        e.g. "April 1976-February 1980" or "Nov 11, 1977-May 16, 1978"
+# SPECIAL CASES: Range of dates spanning across years
 #   Only capture the year range, not the dates
-
+# ex. "April 1976-February 1980"
 exp = re.compile(r'^' + mmm_ddRE + ',? (' + yyyyRE + ') ?- ?' + mmm_ddRE + ',? (' + yyyyRE + ')$')
 for row, years in df['Description'].str.extract(exp, expand=True).dropna().apply('-'.join, axis=1).items():
     df.at[row, 'Chron_I'] = years
+# ex. "Nov 11-May 16, 1977-1978"
+exp = re.compile(r'^' + mmm_ddRE + ' ?- ?' + mmm_ddRE + ' (' + yyyy_yyRE + ')$')
+for row, years in df['Description'].str.extract(exp, expand=True).dropna().apply('-'.join, axis=1).items():
+    df.at[row, 'Chron_I'] = years
+
+# SPECIAL CASES: Range of volumes spanning across years
+# ex. "v.16-20 1976-1980"
+exp = re.compile(r'^' + vvv_vvRE + ' (' + yyyy_yyRE + ')$')
+for i, field in enumerate(['Enum_A', 'Chron_I']):
+    for row, x in df['Description'].str.extract(exp, expand=True).dropna()[i].items():
+        df.at[row, field] = x
+# ex. "v.76 Jan 16, 1986-v.80 Dec 1989"
+#   Ignore dates, capture vols & years
+exp = re.compile(r'^' + vvvRE + ' ' + mmm_ddRE + r',? (' + yyyyRE + ') ?- ?' + vvvRE + ' ' + mmm_ddRE + r',? (' + yyyyRE + ')$')
+for item, field in enumerate(['Enum_A', 'Chron_I']):
+    for row, x in df['Description'].str.extract(exp, expand=True).dropna()[[item, item + 2]].apply('-'.join, axis=1).items():
+        df.at[row, field] = x
 ###
 
 
