@@ -29,7 +29,7 @@ df.Description = df.Description.str.strip()
 df.Description.replace(' +', ' ', regex=True, inplace=True)
 
 # Exclude special cases--GovDocs with weird numbering
-df = df[~((df['Material'].isin(['Issue','Microform','Other'])) & (df['Location'].isin(['gdmo','gdrf','gdrfi','govdo'])))]
+df = df[~((df['Material'].isin(['Issue', 'Microform', 'Other'])) & (df['Location'].isin(['gdmo', 'gdrf', 'gdrfi', 'govdo'])))]
 
 
 ###################################################################
@@ -114,6 +114,14 @@ fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + r'[
 # Date(s) + year
 fill_and_extract(r'^(' + mmm_ddRE + '),? (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
+
+# SPECIAL CASE: Range of dates spanning across years
+#        e.g. "April 1976-February 1980" or "Nov 11, 1977-May 16, 1978"
+#   Only capture the year range, not the dates
+
+exp = re.compile(r'^' + mmm_ddRE + ',? (' + yyyyRE + ') ?- ?' + mmm_ddRE + ',? (' + yyyyRE + ')$')
+for row, years in df['Description'].str.extract(exp, expand=True).dropna().apply('-'.join, axis=1).items():
+    df.at[row, 'Chron_I'] = years
 ###
 
 
