@@ -94,9 +94,9 @@ fill_and_extract(r'^' + vvvRE + r' pt\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
 # Just issue
 fill_and_extract(r'^no\. ?(\d+)$',
     ['Enum_B'])
-# Issue + date + year
+# Issue + date(s) + year
 fill_and_extract(r'^no\. ?(\d+) (' + mmm_ddRE + ') (' + yyyy_yyRE + r')$',
-    ['Enum_B', 'Chron_I'])
+    ['Enum_B', 'Chron_J', 'Chron_I'])
 # Issue + year(s)
 fill_and_extract(r'^no\. ?(\d+) (' + yyyy_yyRE + r')$',
     ['Enum_B', 'Chron_I'])
