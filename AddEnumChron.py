@@ -138,6 +138,14 @@ exp = re.compile(r'^' + vvvRE + ' ' + mmm_ddRE + r',? (' + yyyyRE + ') ?- ?' + v
 for item, field in enumerate(['Enum_A', 'Chron_I']):
     for row, x in df['Description'].str.extract(exp, expand=True).dropna()[[item, item + 2]].apply('-'.join, axis=1).items():
         df.at[row, field] = x
+# ex. "v.43-45 Jun 21-Jan 30, 1928/30"
+#   Ignore dates, capture vols & years
+#   Can't use the regular yyyy_yyRE expression, because it doesn't recognize '/' between
+#        years, and it really can't, because there would be a lot of false positives
+exp = re.compile(r'^' + vvv_vvRE + ' ' + mmm_ddRE + ' ?- ?' + mmm_ddRE + ',? (' + yyyyRE + r'[\-\/]\d\d(?:\d\d)?)$')
+for i, field in enumerate(['Enum_A', 'Chron_I']):
+    for row, x in df['Description'].str.extract(exp, expand=True).dropna()[i].items():
+        df.at[row, field] = x.replace('/', '-')
 ###
 
 
