@@ -64,6 +64,10 @@ mmm_ddRE = mmmRE + r'(?: \d{1,2}(?:[\-\/]\d{1,2})?)?'
 yyyyRE = r'(?:1[89]|20)\d{2}'
 # 4-digit year possibly leading to a range
 yyyy_yyRE = r'(?:1[89]|20)\d{2}(?:-\d{2}|-\d{4})?'
+# 4-digit year leading to a range, possibly using a SLASH
+#   Beware false positives
+#   Remember to replace the slash with a hyphen in the Chron_I
+yyyy_SyyRE = r'(?:1[89]|20)\d{2}(?:[\-\/]\d{2}|[\-\/]\d{4})?'
 
 
 # Just volume(s) & nothing else
@@ -117,9 +121,6 @@ fill_and_extract(r'^(' + yyyyRE + r') (' + mmm_ddRE + r')$',
 # Range of dates within one calendar year
 fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
-# Range of dates and range of years
-fill_and_extract(r'^(' + mmm_ddRE + r'[\-\/]' + mmm_ddRE + '), (' + yyyyRE + r'[\-\/]' + mmm_ddRE + ')$',
-    ['Chron_J', 'Chron_I'])
 # Date(s) + year
 fill_and_extract(r'^(' + mmm_ddRE + '),? (' + yyyyRE + ')$',
     ['Chron_J', 'Chron_I'])
@@ -131,9 +132,13 @@ exp = re.compile(r'^' + mmm_ddRE + ',? (' + yyyyRE + ') ?- ?' + mmm_ddRE + ',? (
 for row, years in df['Description'].str.extract(exp, expand=True).dropna().apply('-'.join, axis=1).items():
     df.at[row, 'Chron_I'] = years
 # ex. "Nov 11-May 16, 1977-1978"
-exp = re.compile(r'^' + mmm_ddRE + ' ?- ?' + mmm_ddRE + ' (' + yyyy_yyRE + ')$')
+exp = re.compile(r'^' + mmm_ddRE + ' ?- ?' + mmm_ddRE + ' (' + yyyy_SyyRE + ')$')
 for row, years in df['Description'].str.extract(exp, expand=True).dropna().apply('-'.join, axis=1).items():
-    df.at[row, 'Chron_I'] = years
+    df.at[row, 'Chron_I'] = years.replace('/', '-')
+# ex. "Nov 11-May 16, 1977-1978"
+exp = re.compile(r'^' + mmm_ddRE + ' ?- ?' + mmm_ddRE + ' (' + yyyy_SyyRE + ')$')
+for row, years in df['Description'].str.extract(exp, expand=True).dropna().apply('-'.join, axis=1).items():
+    df.at[row, 'Chron_I'] = years.replace('/', '-')
 
 # SPECIAL CASES: Range of volumes spanning across years
 # ex. "v.16-20 1976-1980"
@@ -149,9 +154,7 @@ for item, field in enumerate(['Enum_A', 'Chron_I']):
         df.at[row, field] = x
 # ex. "v.43-45 Jun 21-Jan 30, 1928/30"
 #   Ignore dates, capture vols & years
-#   Can't use the regular yyyy_yyRE expression, because it doesn't recognize '/' between
-#        years, and it really can't, because there would be a lot of false positives
-exp = re.compile(r'^' + vvv_vvRE + ' ' + mmm_ddRE + ' ?- ?' + mmm_ddRE + ',? (' + yyyyRE + r'[\-\/]\d\d(?:\d\d)?)$')
+exp = re.compile(r'^' + vvv_vvRE + ' ' + mmm_ddRE + ' ?- ?' + mmm_ddRE + ',? (' + yyyy_SyyRE + ')$')
 for i, field in enumerate(['Enum_A', 'Chron_I']):
     for row, x in df['Description'].str.extract(exp, expand=True).dropna()[i].items():
         df.at[row, field] = x.replace('/', '-')
