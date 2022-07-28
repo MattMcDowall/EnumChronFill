@@ -84,6 +84,9 @@ fill_and_extract(r'^' + vvv_vvRE + r' (' + iiiiRE + r')$',
 # Volume(s) + year(s)
 fill_and_extract(r'^' + vvv_vvRE + r' +\(?(' + yyyy_yyRE + r')\)?$',
     ['Enum_A', 'Chron_I'])
+# Volume + part(s)
+fill_and_extract(r'^' + vvvRE + r' pt\. ?(\d+[a-z]?(?:[\&\-]\d+)?)$',
+    ['Enum_A', 'Enum_C'])
 # Just issue
 fill_and_extract(r'^no\. ?(\d+)$',
     ['Enum_B'])
