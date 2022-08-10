@@ -110,7 +110,7 @@ fill_and_extract(r'^(' + yyyy_yyRE + r')$',
 fill_and_extract(r'^(' + yyyy_yyRE + r') ' + vvv_vvRE + r'$',
     ['Chron_I', 'Enum_A'])
 # Year(s) + part(s)
-fill_and_extract(r'^(' + yyyy_yyRE + r') pt\. ?(\d+(?:[\-\/]\d+)?)$',
+fill_and_extract(r'^(' + yyyy_yyRE + r')[ /]pt\. ?(\d+(?:[\-\/]\d+)?)$',
     ['Chron_I', 'Enum_C'])
 # Year(s) + "Index"
 fill_and_extract(r'^(' + yyyy_yyRE + r') (' + iiiiRE + r')$',
