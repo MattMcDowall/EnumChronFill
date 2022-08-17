@@ -3,7 +3,8 @@
 *.xlsx
 *.csv
 # Any kind of logs
-*log*.txt
+*log
+*.txt
 # API Credentials — added wildcard because it's on a cloud drive; sometimes Google adds '(1)' or something
 Credentials*.py
 
