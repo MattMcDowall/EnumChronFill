@@ -1,13 +1,3 @@
-> &nbsp;
-> 
-> ### 🛑 **Please note**
-> 
-> *I have made a significant change to the repository, removing a large CSV file that I had initially included. This is purely to save space; everyone really doesn't need to download that massive file (and any changes to it) as part of this repo.*
-> 
-> *But since I have fully removed the file even from the repo history, this means that if you cloned/downloaded the repo **before May 25, 2022,** you should really re-clone it now.*
-> 
-> &nbsp;
-
 # EnumChronFill
 This project addresses an issue in Ex Libris Alma, typically following migration (or, I suppose, following a period of poor cataloging). It's typical for a large number of serial/continuous items to have `Descriptions` that indicate enumeration &amp; chronology info, but have empty `Enum` &amp; `Chron` fields. These items appear to display correctly in Primo, but lose the functionality that derives from proper Enum &amp; Chron information&mdash;namely, the ability to sort by volume, by year, etc.
 
@@ -39,12 +29,12 @@ It's fine if these column headings have spaces rather than underscores&mdash;the
 For my own purposes, some of our Enum/Chron fields may vary based on material type and location within the library. So, future instances of the tool may reference these columns as well. I will probably comment out these sections, because they're likely to be quite specific to our institution.
 
 ### **Dependencies**
-You'll need Python to run the script, of course. At this point, the only packages you need are `pandas` and `re`. I also highly recommend `pprint`, but you can probably disable the calls for it within the script if you'd like.
+You'll need Python to run the script, of course. You will also need the `pandas`, `requests`, and `xmltodict` packages.
 
 ## **A note on authentication**
 You're also going to need appropriate API keys for your institution. Getting that set up is beyond the scope of this introduction, but I do want to mention how I've gone about implementing the authentication.
 
-In order to keep the API credentials private, my approach is to tackle the authentication via an external file, and then call that file from these scripts.
+In order to keep the API credentials private (while making the scripts themselves public), my approach is to tackle the authentication via an external file, and then call that file from these scripts.
 
 What I've done is to create a script called `Credentials.py` which resides in this folder on my computer. To keep it private, I've added a line in the `.gitignore` file which filters it out of any pushes to the public repository. So you'll need to create your own Credentials.py file, in this same directory.
 
