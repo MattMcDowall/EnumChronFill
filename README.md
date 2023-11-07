@@ -16,7 +16,7 @@ The info contained in these Description fields is pretty stunning in its variety
 ## **Requirements**
 In an effort to simplify things and avoid a lot of unnecessary API calls, this script reads its record info from a CSV file in this same directory.
 
-> **Please note:** I have created a public Alma Analytics report to extract the proper fields, and to filter for records which have Desc but not Enum or Chron info. From the Alma Analytics catalog, navigate to `Shared Folders > Community > Reports` and you’ll find the `EnumChronFix` report. From that report, you can easily export a spreadsheet custom-made for use with this tool.
+> **Please note:** I have created a public Alma Analytics report to extract the proper fields, and to filter for records which have Desc but not Enum or Chron info. From the Alma Analytics catalog, navigate to `Shared Folders > Community > Reports` and you’ll find the `EnumChronFill` report. From that report, you can easily export a spreadsheet custom-made for use with this tool.
 
 If you wish to export your own CSV file from Alma, the file should be named FullItemList.csv, and it must have at least the following columns:
 - MMS_ID
